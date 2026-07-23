@@ -36,7 +36,7 @@ npx serve .
 ```
 **Catatan Penting Alat Fisik (Driver & Software Tambahan)**: 
 Agar alat sidik jari fisik dapat terbaca dan berkomunikasi dengan browser Anda, Anda diwajibkan untuk mengunduh dan menginstal peranti lunak (driver / Lite Client) resmi terlebih dahulu melalui tautan berikut:
-👉 [Unduh HID Authentication Device Client (Lite Client)](https://crossmatch.hid.gl/lite-client/)
+ [Unduh HID Authentication Device Client (Lite Client)](https://crossmatch.hid.gl/lite-client/)
 
 ### Memperbarui
 Untuk menarik pembaruan kode terbaru dari repositori GitHub:
