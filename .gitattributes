@@ -11,3 +11,8 @@ backend/node_modules/** linguist-vendored
 *.css linguist-language=CSS
 *.json linguist-language=JSON
 *.md linguist-language=Markdown
+
+*.sql linguist-detectable=true
+*.md linguist-detectable=true
+*.env linguist-detectable=true linguist-language=Shell
+*.json linguist-detectable=true

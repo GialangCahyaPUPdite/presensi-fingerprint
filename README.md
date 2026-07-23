@@ -68,6 +68,8 @@ Halaman web/aplikasi ini dapat digunakan secara bebas untuk proyek pribadi, eduk
 
 Besar harapan saya akan apresiasi dari Anda dengan bersedia mem-follow akun GitHub ini sebagai bentuk dukungan terhadap pengembangan proyek ini:
 
-[Follow GitHub (GialangCahyaPUPdite)](https://github.com/GialangCahyaPUPdite)
+<a href="https://github.com/GialangCahyaPUPdite" target="_blank">
+  <img src="https://img.shields.io/badge/FOLLOW%20GITHUB-GIALANGCAHYAPUPDITE-black?style=for-the-badge&logo=github" alt="Follow GitHub">
+</a>
 
 Terima kasih!
