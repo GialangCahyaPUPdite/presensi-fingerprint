@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Presensi — Daftar Peserta</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;500;700&family=IBM+Plex+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <h1>Daftar Peserta / Karyawan</h1>
+    <p class="sub">
+      Kelola identitas yang terhubung ke sistem presensi. Pendaftaran sidik jari
+      (enrollment biometrik) dilakukan lewat DigitalPersona Enrollment, bukan di
+      halaman ini.
+    </p>
+
+    <div class="wrap">
+      <div class="card">
+        <div class="hint">
+          <strong>dp_username</strong> harus sama persis dengan username
+          identitas orang ini di DigitalPersona Authentication Server (DPAM),
+          supaya hasil identifikasi sidik jari bisa dicocokkan ke data presensi.
+        </div>
+        <form id="empForm">
+          <label>Nama lengkap</label>
+          <input name="nama" required placeholder="Andi Wijaya" />
+          <label>ID Pegawai / NIP</label>
+          <input name="id_pegawai" required placeholder="EMP-0231" />
+          <label>Username DigitalPersona (dp_username)</label>
+          <input name="dp_username" required placeholder="andi.wijaya" />
+          <label>Jabatan (opsional)</label>
+          <input name="jabatan" placeholder="Staf Training" />
+          <button type="submit">Daftarkan peserta</button>
+          <div id="formMsg"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>ID</th>
+              <th>dp_username</th>
+              <th>Jabatan</th>
+            </tr>
+          </thead>
+          <tbody id="empRows">
+            <tr>
+              <td colspan="4">Memuat…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:3001/api";
+
+      async function loadEmployees() {
+        const rows = document.getElementById("empRows");
+        try {
+          const res = await fetch(`${API_BASE}/employees`);
+          const data = await res.json();
+          rows.innerHTML = data.length
+            ? data
+                .map(
+                  (e) => `<tr>
+          <td>${e.nama}</td>
+          <td class="badge">${e.id_pegawai}</td>
+          <td class="badge">${e.dp_username}</td>
+          <td>${e.jabatan || "—"}</td>
+        </tr>`,
+                )
+                .join("")
+            : '<tr><td colspan="4">Belum ada peserta terdaftar.</td></tr>';
+        } catch {
+          rows.innerHTML =
+            '<tr><td colspan="4">Tidak bisa hubungi server backend.</td></tr>';
+        }
+      }
+
+      document
+        .getElementById("empForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const msg = document.getElementById("formMsg");
+          const fd = new FormData(e.target);
+          const payload = Object.fromEntries(fd.entries());
+
+          try {
+            const res = await fetch(`${API_BASE}/employees`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (res.ok) {
+              msg.textContent = `${data.nama} berhasil didaftarkan.`;
+              msg.className = "ok";
+              e.target.reset();
+              loadEmployees();
+            } else {
+              msg.textContent = data.error || "Gagal mendaftarkan peserta.";
+              msg.className = "err";
+            }
+          } catch {
+            msg.textContent = "Tidak bisa hubungi server backend.";
+            msg.className = "err";
+          }
+        });
+
+      loadEmployees();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Presensi Sidik Jari</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--
+  ============================================================================
+  INTEGRASI DIGITALPERSONA WEBSDK — WAJIB DIBACA
+  ============================================================================
+  File-file berikut TIDAK disertakan di sini karena berlisensi HID/DigitalPersona
+  dan didapat dari instalasi SDK/Web Components kamu sendiri, bukan dari CDN publik:
+
+    - WebSdk.js                     (dari HID DigitalPersona SDK / Lite Client sample)
+    - dp.core.js                    (dari paket @digitalpersona/core)
+    - dp.devices.js                 (dari paket @digitalpersona/devices)
+    - dp.authentication.js          (dari paket @digitalpersona/authentication)
+
+  Taruh file-file itu di folder ./vendor/ di sebelah index.html ini, lalu
+  aktifkan baris <script> di bawah. Selama file belum ada, halaman ini otomatis
+  jalan di MODE SIMULASI (lihat fingerprint-bridge.js) supaya kamu tetap bisa
+  lihat & uji tampilan real-time-nya sekarang juga.
+  ============================================================================
+-->
+    <script src="./vendor/WebSdk.js"></script>
+    <script src="./vendor/dp.core.js"></script>
+    <script src="./vendor/dp.devices.js"></script>
+    <script src="./vendor/dp.authentication.js"></script>
+
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <div class="kiosk">
+      <div class="topbar">
+        <div style="display: flex; align-items: center; gap: 16px">
+          <div class="brand">Presensi <span>Sidik Jari</span></div>
+          <a href="daftar.html" class="nav-btn"
+            >Pendaftaran Pegawai & Sidik Jari</a
+          >
+        </div>
+        <div class="clock">
+          <b id="clockTime">--:--:--</b>
+          <div id="clockDate">-</div>
+        </div>
+      </div>
+
+      <div class="card scan-panel">
+        <div class="fp-wrap waiting" id="fpWrap">
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+          <div class="fp-icon">
+            <svg
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke-width="3.2"
+              stroke-linecap="round"
+            >
+              <path
+                class="ridge"
+                d="M50 20 C30 20 22 35 22 50 C22 68 32 80 50 80"
+              />
+              <path
+                class="ridge"
+                d="M50 12 C25 12 14 32 14 50 C14 70 27 86 50 88"
+              />
+              <path
+                class="ridge"
+                d="M50 28 C36 28 30 39 30 50 C30 63 38 72 50 72"
+              />
+              <path
+                class="ridge"
+                d="M50 36 C42 36 38 43 38 50 C38 58 43 64 50 64"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="status-title" id="statusTitle">Tempelkan jari Anda</div>
+        <div class="status-sub" id="statusSub">
+          Letakkan jari tepat di tengah sensor
+        </div>
+
+        <button class="sim-btn" id="simBtn" type="button">
+          ▸ Jalankan simulasi scan
+        </button>
+      </div>
+
+      <div class="card feed-panel">
+        <div class="feed-title">Presensi hari ini</div>
+        <ul class="feed-list" id="feedList">
+          <li class="feed-empty">Belum ada presensi hari ini.</li>
+        </ul>
+
+        <div class="footer-note">
+          <span id="deviceStatus">Memeriksa reader…</span>
+          <button
+            type="button"
+            id="reconnectBtn"
+            class="nav-btn"
+            style="
+              display: none;
+              cursor: pointer;
+              background: var(--panel-2);
+              border-color: var(--accent);
+              color: var(--accent);
+              padding: 4px 10px;
+              font-size: 11px;
+            "
+          >
+            Hubungkan Ulang
+          </button>
+          <span class="mode-pill sim" id="modePill">MODE SIMULASI</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ============================================================================
+      // KONFIGURASI — sesuaikan dengan environment kamu
+      // ============================================================================
+      const CONFIG = {
+        // URL backend presensi (Express) — lihat backend/server.js
+        API_BASE: "http://localhost:3001/api",
+
+        // URL DigitalPersona Authentication Server (DPAM) kamu, untuk identifikasi 1:N.
+        // Contoh: 'https://dpam.kantor.local/DPWebAuth'
+        DP_AUTH_SERVER: "https://CHANGE-ME.dpam-server.local",
+
+        // Info kiosk ini (dicatat di log presensi supaya tahu presensi dari device mana)
+        DEVICE_LABEL: "Kiosk Utama",
+
+        // Berapa lama hasil (nama / error) ditampilkan sebelum kembali ke status siaga
+        RESULT_DISPLAY_MS: 3200,
+      };
+    </script>
+    <script src="./fingerprint-bridge.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
